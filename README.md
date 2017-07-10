@@ -8,3 +8,8 @@
 <b>[+] Language:</b> Python 2.* <br />
 <b>[+] OS:</b> *nix <br />
 <hr>
+<br />
+<b>Usage:</b><br />
+python cobaltbrew.py -f localfile.name<br />
+python cobaltbrew.py -u https://remote.url/to/file.name<br />
+Output shows 3 hashs, MD5, SHA256, SHA512.
