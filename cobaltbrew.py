@@ -13,7 +13,7 @@ sha256 = hashlib.sha256()
 sha512 = hashlib.sha512()
 trash = 'tra.sh'
 
-parser = argparse.ArgumentParser(epilog='Example: python hash.py -f malware.exe')
+parser = argparse.ArgumentParser(epilog='Example: python cobaltbrew.py -f malware.exe')
 parser.add_argument('-u', '--url', help='URL to file to get hashes remotely.', required=False)
 parser.add_argument('-f', '--file', help='The file to get hashes locally.', required=False)
 args = parser.parse_args()
