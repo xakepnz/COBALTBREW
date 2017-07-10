@@ -1,10 +1,10 @@
-# Hash
-Hash any file Local/Remote on *nix using Python.
+# COBALTBREW
 
-[+] Website: https://intellipedia.ch
-[+] Name: cobaltbrew.py
-[+] Author: xakep
-[+] Version: 0.1.2
-[+] Date: July 2017
-[+] Language: Python 2.*
-[+] OS: *nix
+<b>[+] Website:</b> https://intellipedia.ch <br />
+<b>[+] Name:</b> cobaltbrew.py <br />
+<b>[+] Author:</b> xakep <br />
+<b>[+] Version:</b> 0.1.2 <br />
+<b>[+] Date:</b> July 2017<br />
+<b>[+] Language:</b> Python 2.* <br />
+<b>[+] OS:</b> *nix <br />
+<hr>
