@@ -63,7 +63,7 @@ def remotefiles():
         print '[+] Firing Canons...'
         print '[+] Downloading: ' + url
         if sys.platform == 'darwin':
-                remotefile = os.system('curl ' + url + ' -o ' + trash ' -A ' + agent + ' -f' + ' -k' + ' -s')
+                remotefile = os.system('curl ' + url + ' -o ' + trash + ' -A ' + agent + ' -f' + ' -k' + ' -s')
         if sys.platform == 'linux' or 'linux32':
                 remotefile = os.system('wget ' + ' -q' + ' -c' + ' -U ' + url + ' --no-check-certificate' + ' -O ' + trash)
         if sys.platform = 'win32':
