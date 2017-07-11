@@ -13,7 +13,7 @@ sha1 = hashlib.sha1()
 sha256 = hashlib.sha256()
 sha512 = hashlib.sha512()
 trash = 'tra.sh'
-agent = 'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)'
+agent = ("Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--url', help='Specify a URL to download a file, and get its hash.', required=False)
@@ -47,7 +47,7 @@ def localfiles():
         print ''
         print 'Hash Results:'
         print ''
-        print (' File:    ' + localfile)
+        print (' File:   ' + localfile)
         print (' MD5:    {0}'.format(md5.hexdigest()))
         print (' SHA1:   {0}'.format(sha1.hexdigest()))
         print (' SHA256: {0}'.format(sha256.hexdigest()))
@@ -65,7 +65,7 @@ def remotefiles():
         if sys.platform == 'darwin':
                 remotefile = os.system('curl ' + url + ' -o ' + trash + ' -A ' + agent + ' -f' + ' -k' + ' -s')
         if sys.platform == 'linux' or 'linux32':
-                remotefile = os.system('wget ' + ' -q' + ' -c' + ' -U ' + url + ' --no-check-certificate' + ' -O ' + trash)
+                remotefile = os.system('wget ' + ' -q' + ' -c' + ' -U' + ' --no-check-certificate ' + url + ' -O ' + trash)
         if sys.platform == 'win32':
                 print '[!] Error. This feature does not work on Windows platforms yet.'
                 exit (0)
@@ -90,7 +90,7 @@ def remotefiles():
         print ''
         print 'Hash Results:'
         print ''
-        print (' URL:    ' + localfile)
+        print (' URL:   ' + localfile)
         print (' MD5:    {0}'.format(md5.hexdigest()))
         print (' SHA1:   {0}'.format(sha1.hexdigest()))
         print (' SHA256: {0}'.format(sha256.hexdigest()))
