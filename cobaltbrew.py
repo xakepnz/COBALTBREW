@@ -62,9 +62,9 @@ def remotefiles():
         print ''
         print '[+] Firing Canons...'
         print '[+] Downloading: ' + url
-        if sys.platform = 'darwin':
+        if sys.platform == 'darwin':
                 remotefile = os.system('curl ' + url + ' -o ' + trash ' -A ' + agent + ' -f' + ' -k' + ' -s')
-        if sys.platform = 'linux' or 'linux32':
+        if sys.platform == 'linux' or 'linux32':
                 remotefile = os.system('wget ' + ' -q' + ' -c' + ' -U ' + url + ' --no-check-certificate' + ' -O ' + trash)
         if sys.platform = 'win32':
                 print '[!] Error. This feature does not work on Windows platforms yet.'
