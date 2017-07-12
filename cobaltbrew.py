@@ -13,7 +13,7 @@ sha1 = hashlib.sha1()
 sha256 = hashlib.sha256()
 sha512 = hashlib.sha512()
 trash = 'trash'
-agent = ('BlackBerry9700/5.0.0.351 Profile/MIDP-2.1 Configuration/CLDC-1.1 VendorID/123')
+agent = ('"BlackBerry9700/5.0.0.351 Profile/MIDP-2.1 Configuration/CLDC-1.1 VendorID/123"')
 platform = False
 
 parser = argparse.ArgumentParser()
