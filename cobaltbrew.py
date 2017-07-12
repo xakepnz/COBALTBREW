@@ -12,8 +12,8 @@ md5 = hashlib.md5()
 sha1 = hashlib.sha1()
 sha256 = hashlib.sha256()
 sha512 = hashlib.sha512()
-trash = 'tra.sh'
-agent = ('"Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)"')
+trash = 'trash'
+agent = ('BlackBerry9700/5.0.0.351 Profile/MIDP-2.1 Configuration/CLDC-1.1 VendorID/123')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--url', help='Specify a URL to download a file, and get its hash.', required=False)
@@ -23,15 +23,15 @@ url = args.url
 localfile = args.file
 
 if localfile is None and url is None:
-        print '[!] Nothing to hash. Try -h or --help?'
-        print '[!] Exiting.'
+        print '[?] Nothing to hash. Try -h or --help?'
+        print '[!] Error: Nothing submitted...'
         exit(0)
 
 def localfiles():
     try:
         if os.path.isfile(localfile) is False:
-           print '[?] Does: ' + file + ' Exist? Try the full path. (/Im/noob/tra.sh)'
-           print '[!] Exiting.'
+           print '[?] Does: ' + file + ' Exist?'
+           print '[!] Error: File not found...'
            exit(0)
 
         with open(localfile, 'rb') as f:
@@ -55,12 +55,11 @@ def localfiles():
         print ''
 
     except Exception as e:
-        print '[!] There was a weird error.',e
+        print '[!] Error: Unable to computate hashes...',e
 
 def remotefiles():
     try:
         print ''
-        print '[+] Firing Canons...'
         print '[+] Downloading: ' + url
         if sys.platform == 'darwin':
                 remotefile = os.system('curl ' + url + ' -o ' + trash + ' -A ' + agent + ' -f' + ' -k' + ' -s')
@@ -72,7 +71,7 @@ def remotefiles():
         print '[+] Temporarily saved as: ' + trash
 
     except Exception as e:
-           print '[!] Something failed.',e
+           print '[!] Error: Unable to download remote file...',e
            exit(0)
 
     try:
@@ -98,7 +97,7 @@ def remotefiles():
         print ''
 
     except Exception as e:
-           print '[!] There was an issue hashing remotely...',e
+           print '[!] Error: There was an issue hashing remotely...',e
            exit(0)
 
 if args.file is not None:
