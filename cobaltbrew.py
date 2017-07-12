@@ -13,7 +13,7 @@ sha1 = hashlib.sha1()
 sha256 = hashlib.sha256()
 sha512 = hashlib.sha512()
 trash = 'trash'
-agent = ('"BlackBerry9700/5.0.0.351 Profile/MIDP-2.1 Configuration/CLDC-1.1 VendorID/123"')
+agent = ('"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"')
 platform = False
 
 parser = argparse.ArgumentParser()
@@ -81,12 +81,12 @@ def remotefiles():
                 platform = True
                 print '[!] Error. This feature does not work on Cygwin.'
                 exit(0)
-                
+
         if platform == False:
                 print '[!] Error. Unknown OS.'
                 exit(0)
                 
-        print '[+] Temporarily saved as: ' + trash
+        print '[+] Temporarily saved as: ' + '"'+trash+'"'
 
     except Exception as e:
            print '[!] Error: Unable to download remote file...',e
@@ -102,7 +102,7 @@ def remotefiles():
                 sha1.update(data)
                 sha256.update(data)
                 sha512.update(data)
-        os.system('rm ' + trash)
+    #    os.system('rm ' + trash)
         
         print ''
         print 'Hash Results:'
