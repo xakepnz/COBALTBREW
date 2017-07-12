@@ -107,7 +107,7 @@ def remotefiles():
         print ''
         print 'Hash Results:'
         print ''
-        print (' URL:   ' + str(url)
+        print (' URL:   ' + str(url))
         print ''
         print (' MD5:    {0}'.format(md5.hexdigest()))
         print (' SHA1:   {0}'.format(sha1.hexdigest()))
