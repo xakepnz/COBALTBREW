@@ -48,6 +48,7 @@ def localfiles():
         print 'Hash Results:'
         print ''
         print (' File:   ' + localfile)
+        print ''
         print (' MD5:    {0}'.format(md5.hexdigest()))
         print (' SHA1:   {0}'.format(sha1.hexdigest()))
         print (' SHA256: {0}'.format(sha256.hexdigest()))
@@ -63,7 +64,7 @@ def remotefiles():
         print '[+] Downloading: ' + url
         if sys.platform == 'darwin':
                 remotefile = os.system('curl ' + url + ' -o ' + trash + ' -A ' + agent + ' -f' + ' -k' + ' -s')
-        if sys.platform == 'linux' or 'linux32':
+        if sys.platform == 'linux2':
                 remotefile = os.system('wget ' + ' -q' + ' -c' + ' -U ' + agent + ' --no-check-certificate ' + url + ' -O ' + trash)
         if sys.platform == 'win32':
                 print '[!] Error. This feature does not work on Windows platforms yet.'
@@ -90,6 +91,7 @@ def remotefiles():
         print 'Hash Results:'
         print ''
         print (' URL:   ' + localfile)
+        print ''
         print (' MD5:    {0}'.format(md5.hexdigest()))
         print (' SHA1:   {0}'.format(sha1.hexdigest()))
         print (' SHA256: {0}'.format(sha256.hexdigest()))
