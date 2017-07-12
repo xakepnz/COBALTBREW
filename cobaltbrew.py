@@ -102,19 +102,19 @@ def remotefiles():
                 sha1.update(data)
                 sha256.update(data)
                 sha512.update(data)
-    #    os.system('rm ' + trash)
+        os.system('rm ' + trash)
         
         print ''
         print 'Hash Results:'
         print ''
-        print (' URL:   ' + localfile)
+        print (' URL:   ' + str(url)
         print ''
         print (' MD5:    {0}'.format(md5.hexdigest()))
         print (' SHA1:   {0}'.format(sha1.hexdigest()))
         print (' SHA256: {0}'.format(sha256.hexdigest()))
         print (' SHA512: {0}'.format(sha512.hexdigest()))
         print ''
-
+        print '[+] ' + trash + ' was deleted.
     except Exception as e:
            print '[!] Error: There was an issue hashing remotely...',e
            exit(0)
