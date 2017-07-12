@@ -14,6 +14,7 @@ sha256 = hashlib.sha256()
 sha512 = hashlib.sha512()
 trash = 'trash'
 agent = ('BlackBerry9700/5.0.0.351 Profile/MIDP-2.1 Configuration/CLDC-1.1 VendorID/123')
+platform = False
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--url', help='Specify a URL to download a file, and get its hash.', required=False)
@@ -62,13 +63,29 @@ def remotefiles():
     try:
         print ''
         print '[+] Downloading: ' + url
+        
         if sys.platform == 'darwin':
+                platform = True
                 remotefile = os.system('curl ' + url + ' -o ' + trash + ' -A ' + agent + ' -f' + ' -k' + ' -s')
+                
         if sys.platform == 'linux2':
+                platform = True
                 remotefile = os.system('wget ' + ' -q' + ' -c' + ' -U ' + agent + ' --no-check-certificate ' + url + ' -O ' + trash)
+        
         if sys.platform == 'win32':
-                print '[!] Error. This feature does not work on Windows platforms yet.'
+                platform = True
+                print '[!] Error. This feature does not work on Windows.'
                 exit (0)
+                
+        if sys.platform == 'cygwin':
+                platform = True
+                print '[!] Error. This feature does not work on Cygwin.'
+                exit(0)
+                
+        if platform = False:
+                print '[!] Error. Unknown OS.'
+                exit(0)
+                
         print '[+] Temporarily saved as: ' + trash
 
     except Exception as e:
