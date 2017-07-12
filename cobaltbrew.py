@@ -82,7 +82,7 @@ def remotefiles():
                 print '[!] Error. This feature does not work on Cygwin.'
                 exit(0)
                 
-        if platform = False:
+        if platform == False:
                 print '[!] Error. Unknown OS.'
                 exit(0)
                 
