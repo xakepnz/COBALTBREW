@@ -114,7 +114,7 @@ def remotefiles():
         print (' SHA256: {0}'.format(sha256.hexdigest()))
         print (' SHA512: {0}'.format(sha512.hexdigest()))
         print ''
-        print '[+] ' + trash + ' was deleted.
+        print '[+] ' + trash + ' was deleted.'
     except Exception as e:
            print '[!] Error: There was an issue hashing remotely...',e
            exit(0)
