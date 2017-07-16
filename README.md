@@ -11,7 +11,7 @@
 <b>Usage:</b><br />
 python cobaltbrew.py -f localfile.name<br />
 python cobaltbrew.py -u https://remote.url/to/file.name<br /><br />
-Output shows 3 hashes of the file:<br />
+Output shows 4 hashes of the file:<br />
 - MD5<br />
 - SHA1<br />
 - SHA256<br />
