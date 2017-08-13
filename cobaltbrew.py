@@ -24,7 +24,7 @@ url = args.url
 localfile = args.file
 
 if localfile is None and url is None:
-        print '[?] Nothing to hash. Try -h or --help?'
+        print '[?] Nothing to hash. Try -u (--url) or -f (--file).'
         print '[!] Error: Nothing submitted...'
         exit(0)
 
