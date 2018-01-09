@@ -8,7 +8,13 @@ This is a simple python script that allows the user to get multiple hashes for a
 <b>[+] Language:</b> Python 2.*<br />
 <b>[+] OS:</b> Linux<br />
 
-![alt text](https://i.imgur.com/97RTcVE.gif "Strikewriter")
+## Remote Example:
+![alt text](https://i.imgur.com/QZsVqu6.gif "Cobaltbrew")
+
+
+## Local Example:
+![alt text](https://i.imgur.com/NaOP5T9.gif "Cobaltbrew")
+
 
 ## Requirements:
 
