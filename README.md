@@ -6,7 +6,7 @@ This is a simple python script that allows the user to get multiple hashes for a
 
 <b>[+] Author:</b> xakep<br />
 <b>[+] Language:</b> Python 2.6<br />
-<b>[+] OS:</b> Linux<br />
+<b>[+] OS:</b> Linux & Mac OS X<br />
 
 ## Local Example: (VT Results enabled)
 ![alt text](https://i.imgur.com/NaOP5T9.gif "Cobaltbrew")
