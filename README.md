@@ -5,7 +5,7 @@
 This is a simple python script that allows the user to get multiple hashes for a local file on their system, or a remote file on the internet. Then the added option to check if that hash exists on Virustotal. The main objective here, was a quick simple way of getting multiple hashes, and confirming if someone has uploaded the file to Virustotal for anti-virus checks.<br />
 
 <b>[+] Author:</b> xakep<br />
-<b>[+] Language:</b> Python 2.*<br />
+<b>[+] Language:</b> Python 2.6<br />
 <b>[+] OS:</b> Linux<br />
 
 ## Local Example:
