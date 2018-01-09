@@ -12,8 +12,8 @@ This is a simple python script that allows the user to get multiple hashes for a
 
 ## Requirements:
 
-Virustotal API Key - OPTIONAL - https://www.virustotal.com/
-Python dependencies see below.
+[+] <b>OPTIONAL</b> Virustotal API Key - https://www.virustotal.com/<br />
+[+] Python dependencies (see below).
 
 ## Install:
 
