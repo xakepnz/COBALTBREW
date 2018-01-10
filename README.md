@@ -44,11 +44,11 @@ $ ./cobaltbrew -r https://www.suspicious.site/odd.pdf -c
 
 ## Usage:
 
-<b>Local files, no Virustotal check:</b><br/ >
+<b>Local files, no Virustotal check:</b>
 ```
 $ ./cobaltbrew -f /path/to/my/localfile
 ```
-<b>Remote files, no Virustotal check:</b><br />
+<b>Remote files, no Virustotal check:</b>
 ```
 $ ./cobaltbrew -r https://a-website.com/remote/file.exe
 ```
