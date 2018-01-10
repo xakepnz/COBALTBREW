@@ -41,3 +41,16 @@ $ chmod +x cobaltbrew
 $ ./cobaltbrew -f ~/Desktop/myfiles/unknown.pdf
 $ ./cobaltbrew -r https://www.suspicious.site/odd.pdf -c
 ```
+
+## Usage:
+
+<b>Local files, no Virustotal check:</b><br/ >
+```
+$ ./cobaltbrew -f /path/to/my/localfile
+```
+<b>Remote files, no Virustotal check:</b><br />
+```
+$ ./cobaltbrew -r https://a-website.com/remote/file.exe
+```
+<b>With Virustotal check, add your API key in the source, and add the flag -c</b>
+
