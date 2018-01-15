@@ -37,11 +37,6 @@ $ pip install -r requirements.txt
 $ chmod +x cobaltbrew
 ```
 
-```
-$ ./cobaltbrew -f ~/Desktop/myfiles/unknown.pdf
-$ ./cobaltbrew -r https://www.suspicious.site/odd.pdf -c
-```
-
 ## Usage:
 
 <b>Local files, no Virustotal check:</b>
