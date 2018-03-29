@@ -37,6 +37,10 @@ $ pip install -r requirements.txt
 $ chmod +x cobaltbrew
 ```
 
+```
+$ sudo cp cobaltbrew /bin/
+```
+
 ## Usage:
 
 <b>Local files, no Virustotal check:</b>
