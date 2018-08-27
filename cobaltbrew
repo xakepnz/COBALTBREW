@@ -44,12 +44,12 @@ def localfiles():
                     sha1.update(data)
                     sha256.update(data)
                     sha512.update(data)
-        print bcolors.BOLD,'\n[+] Hash Results:\n',bcolors.ENDC
-        print bcolors.OKBLUE,(' File:   ' + localfile + '\n'),bcolors.ENDC
-        print bcolors.OKGREEN,(' MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
+        print bcolors.BOLD,'\n*Hash Results:*\n',bcolors.ENDC
+        print bcolors.OKBLUE,('*File:*   ' + localfile + '\n'),bcolors.ENDC
+        print bcolors.OKGREEN,('* MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
         exit (0)
     except Exception as e:
         print bcolors.FAIL,'[!] Error: Unable to computate hashes...',e,bcolors.ENDC
@@ -73,12 +73,12 @@ def localfilescheck():
                     sha1.update(data)
                     sha256.update(data)
                     sha512.update(data)
-        print bcolors.BOLD,'[+] Hash Results:\n',bcolors.ENDC
-        print bcolors.OKBLUE,(' File:   ' + localfile + '\n'),bcolors.ENDC
-        print bcolors.OKGREEN,(' MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
+        print bcolors.BOLD,'*Hash Results:*\n',bcolors.ENDC
+        print bcolors.OKBLUE,('*File:*   ' + localfile + '\n'),bcolors.ENDC
+        print bcolors.OKGREEN,('* MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
         localsha = sha256.hexdigest()
         report = v.get(localsha)
         if report is None:
@@ -87,18 +87,18 @@ def localfilescheck():
         else:
             pass
         if report.done:
-            print bcolors.BOLD,'[+] Virustotal Report:',bcolors.ENDC
-            print bcolors.OKBLUE,'[+] - Link:',report.permalink,'\n',bcolors.ENDC
-            print bcolors.BOLD,' [+] Results:\n',bcolors.ENDC
-            print bcolors.OKGREEN,' [+] Resource Status:',report.status,bcolors.ENDC
-            print bcolors.OKGREEN,' [+] Antivirus Total:',report.total,bcolors.ENDC
-            print bcolors.OKGREEN,' [+] Antivirus Positives:',report.positives,'\n',bcolors.ENDC
+            print bcolors.BOLD,'*Virustotal Report:*',bcolors.ENDC
+            print bcolors.OKBLUE,'* Link:',report.permalink,'\n',bcolors.ENDC
+            print bcolors.BOLD,'*Results:*\n',bcolors.ENDC
+            print bcolors.OKGREEN,'* Resource Status:',report.status,bcolors.ENDC
+            print bcolors.OKGREEN,'* Antivirus Total:',report.total,bcolors.ENDC
+            print bcolors.OKGREEN,'* Antivirus Positives:',report.positives,'\n',bcolors.ENDC
             for antivirus, malware in report:
                 if malware is not None:
-                    print bcolors.OKGREEN,'[+]Antivirus:',antivirus[0],bcolors.ENDC
-                    print bcolors.OKGREEN,'Antivirus Version:',antivirus[1],bcolors.ENDC
-                    print bcolors.OKGREEN,'Antivirus Update:',antivirus[2],bcolors.ENDC
-                    print bcolors.OKGREEN,'Malware:',malware,bcolors.ENDC
+                    print bcolors.OKGREEN,'*Antivirus:*',antivirus[0],bcolors.ENDC
+                    print bcolors.OKGREEN,'* Antivirus Version:',antivirus[1],bcolors.ENDC
+                    print bcolors.OKGREEN,'* Antivirus Update:',antivirus[2],bcolors.ENDC
+                    print bcolors.OKGREEN,'* Malware:',malware,bcolors.ENDC
                     exit(0)
     except Exception as e:
         print bcolors.FAIL,'[!] Error: Unable to computate hashes...',e,bcolors.ENDC
@@ -144,12 +144,12 @@ def remotefiles():
                 sha512.update(data)
         os.system('rm ' + trash)
         
-        print bcolors.BOLD,'\n[+] Hash Results:\n',bcolors.ENDC
-        print bcolors.OKBLUE,(' URL:   ' + str(url)) + '\n',bcolors.ENDC
-        print bcolors.OKGREEN,(' MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
+        print bcolors.BOLD,'\n*Hash Results:*\n',bcolors.ENDC
+        print bcolors.OKBLUE,('*URL:*   ' + str(url)) + '\n',bcolors.ENDC
+        print bcolors.OKGREEN,('* MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
         print bcolors.OKGREEN,'[+] Temporary file was deleted.\n',bcolors.ENDC
         exit(0)
     except Exception as e:
@@ -197,12 +197,12 @@ def remotefilescheck():
                 sha256.update(data)
                 sha512.update(data)
         os.system('rm ' + trash)
-        print bcolors.BOLD,'\n[+] Hash Results:\n',bcolors.ENDC
-        print bcolors.OKBLUE,(' URL:   ' + str(url)) + '\n',bcolors.ENDC
-        print bcolors.OKGREEN,(' MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,(' SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
+        print bcolors.BOLD,'\n*Hash Results:*\n',bcolors.ENDC
+        print bcolors.OKBLUE,(' *URL:*   ' + str(url)) + '\n',bcolors.ENDC
+        print bcolors.OKGREEN,('* MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
+        print bcolors.OKGREEN,('* SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
         print bcolors.OKGREEN,'[+] Temporary file was deleted.\n',bcolors.ENDC
         remotesha = sha256.hexdigest()
         report = v.get(remotesha)
@@ -212,18 +212,18 @@ def remotefilescheck():
         else:
             pass
         if report.done:
-            print bcolors.BOLD,'[+] Virustotal Report:',bcolors.ENDC
-            print bcolors.OKBLUE,'[+] - Link:',report.permalink,'\n',bcolors.ENDC
-            print bcolors.BOLD,' [+] Results:\n',bcolors.ENDC
-            print bcolors.OKGREEN,' [+] Resource Status:',report.status,bcolors.ENDC
-            print bcolors.OKGREEN,' [+] Antivirus Total:',report.total,bcolors.ENDC
-            print bcolors.OKGREEN,' [+] Antivirus Positives:',report.positives,'\n',bcolors.ENDC
+            print bcolors.BOLD,'*Virustotal Report:*',bcolors.ENDC
+            print bcolors.OKBLUE,'* Link:',report.permalink,'\n',bcolors.ENDC
+            print bcolors.BOLD,'*Results:*\n',bcolors.ENDC
+            print bcolors.OKGREEN,'* Resource Status:',report.status,bcolors.ENDC
+            print bcolors.OKGREEN,'* Antivirus Total:',report.total,bcolors.ENDC
+            print bcolors.OKGREEN,'* Antivirus Positives:',report.positives,'\n',bcolors.ENDC
             for antivirus, malware in report:
                 if malware is not None:
-                    print bcolors.OKGREEN,'[+]Antivirus:',antivirus[0],bcolors.ENDC
-                    print bcolors.OKGREEN,'Antivirus Version:',antivirus[1],bcolors.ENDC
-                    print bcolors.OKGREEN,'Antivirus Update:',antivirus[2],bcolors.ENDC
-                    print bcolors.OKGREEN,'Malware:',malware,bcolors.ENDC
+                    print bcolors.OKGREEN,'*Antivirus:*',antivirus[0],bcolors.ENDC
+                    print bcolors.OKGREEN,'* Antivirus Version:',antivirus[1],bcolors.ENDC
+                    print bcolors.OKGREEN,'* Antivirus Update:',antivirus[2],bcolors.ENDC
+                    print bcolors.OKGREEN,'* Malware:',malware,bcolors.ENDC
                     exit(0)
     except Exception as e:
            print bcolors.FAIL,'\n[!] Error: There was an issue hashing remotely...\n',e,bcolors.ENDC
@@ -331,4 +331,3 @@ if __name__ == "__main__":
         exit (0)
     else:
         remotefilescheck()
-
