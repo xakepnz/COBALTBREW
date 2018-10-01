@@ -34,6 +34,10 @@ $ pip install -r requirements.txt
 ```
 
 ```
+$ nano cobaltbrew # add in your API key for VT (optional)
+```
+
+```
 $ chmod +x cobaltbrew
 ```
 
