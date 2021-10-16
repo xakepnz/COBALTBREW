@@ -2,17 +2,7 @@
 
 ## Description:
 
-This is a simple python script that allows the user to get multiple hashes for a local file on their system, or a remote file on the internet. Then the added option to check if that hash exists on Virustotal. The main objective here, was a quick simple way of getting multiple hashes, and confirming if someone has uploaded the file to Virustotal for anti-virus checks.<br />
-
-<b>[+] Author:</b> xakep<br />
-<b>[+] Language:</b> Python 2.6<br />
-<b>[+] OS:</b> Linux & Mac OS X<br />
-
-## Local Example: (VT Results enabled)
-![alt text](https://i.imgur.com/NaOP5T9.gif "Cobaltbrew")
-
-## Remote Example: (VT Results enabled)
-![alt text](https://i.imgur.com/QZsVqu6.gif "Cobaltbrew")
+Obtain file hashes of any local file. Optional search against Virustotal with hash results found. Multi-file support.<br />
 
 ## Requirements:
 
@@ -22,38 +12,27 @@ This is a simple python script that allows the user to get multiple hashes for a
 ## Install:
 
 ```
-$ git clone https://github.com/xakepnz/COBALTBREW.git
+git clone https://github.com/xakepnz/COBALTBREW.git
+cd COBALTBREW
+nano cobaltbrew #Edit API Key (optional)
+chmod +x cobaltbrew
+cp cobaltbrew /usr/local/bin
 ```
 
-```
-$ cd COBALTBREW
-```
-
-```
-$ pip install -r requirements.txt
-```
-
-```
-$ nano cobaltbrew # add in your API key for VT (optional)
-```
-
-```
-$ chmod +x cobaltbrew
-```
-
-```
-$ sudo cp cobaltbrew /bin/
-```
 
 ## Usage:
 
-<b>Local files, no Virustotal check:</b>
+<b>Single file, no Virustotal check:</b>
 ```
-$ ./cobaltbrew -f /path/to/my/localfile
+cobaltbrew -f /path/to/my/localfile
 ```
-<b>Remote files, no Virustotal check:</b>
+<b>Multiple files, no Virustotal check:</b>
 ```
-$ ./cobaltbrew -r https://a-website.com/remote/file.exe
+$ ./cobaltbrew -m /path/to/new-line/separated/file/paths.txt
 ```
-<b>With Virustotal check, add your API key in the source, and add the flag -c</b>
+<b>With Virustotal check, add your API key in the source, and add the flag -s</b><br />
 
+```
+cobaltbrew -f /some/file -s
+cobaltbrew -m /path/to/multi.txt -s
+```
