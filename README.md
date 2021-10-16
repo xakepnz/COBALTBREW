@@ -6,8 +6,7 @@ Obtain file hashes of any local file. Optional search against Virustotal with ha
 
 ## Requirements:
 
-[+] <b>OPTIONAL</b> Virustotal API Key - https://www.virustotal.com/<br />
-[+] Python dependencies (see below).
+<b>OPTIONAL</b> Virustotal API Key - https://www.virustotal.com/<br />
 
 ## Install:
 
@@ -28,7 +27,7 @@ cobaltbrew -f /path/to/my/localfile
 ```
 <b>Multiple files, no Virustotal check:</b>
 ```
-$ ./cobaltbrew -m /path/to/new-line/separated/file/paths.txt
+cobaltbrew -m /path/to/new-line/separated/file/paths.txt
 ```
 <b>With Virustotal check, add your API key in the source, and add the flag -s</b><br />
 
