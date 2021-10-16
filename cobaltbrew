@@ -1,333 +1,258 @@
 #!/usr/bin/python
-
-import virustotal, argparse, os, sys, hashlib
-
+# Author: xakepnz
+# Description: Obtains hashes of any local file, optional hash-search against Virustotal.
 ############################################################################################
-# Virustotal API Key: (Optional)
-############################################################################################
-
-VIRUSTOTALKEY = ''
-
-############################################################################################
-# Variables:
+# Imports:
 ############################################################################################
 
-buffer = 65536
-url = None
-localfile = None
-check = False
-platform = False
-md5 = hashlib.md5()
-sha1 = hashlib.sha1()
-sha256 = hashlib.sha256()
-sha512 = hashlib.sha512()
-trash = 'trash'
-agent = ('"COBALTBREW - https://www.github.com/xakepnz/COBALTBREW"')
-v = virustotal.VirusTotal(VIRUSTOTALKEY)
+import argparse
+import hashlib
+import requests
 
 ############################################################################################
-# Local files Function, no check:
+# Config:
 ############################################################################################
 
-def localfiles():
-    try:
-        if os.path.isfile(localfile) is False:
-           print bcolors.WARNING,'[?] Does: ' + file + ' Exist?',bcolors.ENDC
-           print bcolors.FAIL,'[!] Error: File not found...\n',bcolors.ENDC
-           exit(0)
-        with open(localfile, 'rb') as f:
-                while True:
-                    data = f.read(buffer)
-                    if not data:
-                        break
-                    md5.update(data)
-                    sha1.update(data)
-                    sha256.update(data)
-                    sha512.update(data)
-        print bcolors.BOLD,'\n*Hash Results:*\n',bcolors.ENDC
-        print bcolors.OKBLUE,('*File:*   ' + localfile + '\n'),bcolors.ENDC
-        print bcolors.OKGREEN,('* MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
-        exit (0)
-    except Exception as e:
-        print bcolors.FAIL,'[!] Error: Unable to computate hashes...',e,bcolors.ENDC
+# VT API Key:
+api_key = ''
+
+# Buffer chunk size for hash obtaining:
+buffer_size = 65536
 
 ############################################################################################
-# Local files hash, with check:
+# Banner:
 ############################################################################################
 
-def localfilescheck():
-    try:
-        if os.path.isfile(localfile) is False:
-           print bcolors.WARNING,'[?] Does: ' + file + ' Exist?',bcolors.ENDC
-           print bcolors.FAIL,'[!] Error: File not found...\n',bcolors.ENDC
-           exit(0)
-        with open(localfile, 'rb') as f:
-                while True:
-                    data = f.read(buffer)
-                    if not data:
-                        break
-                    md5.update(data)
-                    sha1.update(data)
-                    sha256.update(data)
-                    sha512.update(data)
-        print bcolors.BOLD,'*Hash Results:*\n',bcolors.ENDC
-        print bcolors.OKBLUE,('*File:*   ' + localfile + '\n'),bcolors.ENDC
-        print bcolors.OKGREEN,('* MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
-        localsha = sha256.hexdigest()
-        report = v.get(localsha)
-        if report is None:
-            print bcolors.FAIL,'\n[!] Failed: SHA256 Hash does not exist on Virustotal!\n',bcolors.ENDC
-            exit(0)
+def banner():
+    """ Simple banner for script """
+    print('\n   /######   /######  /#######   /######  /##    /########')
+    print('  /##__  ## /##__  ##| ##__  ## /##__  ##| ##   |__  ##__/')
+    print(' | ##  \__/| ##  \ ##| ##  \ ##| ##  \ ##| ##      | ##')
+    print(' | ##      | ##  | ##| ####### | ########| ##      | ##')
+    print(' | ##      | ##  | ##| ##__  ##| ##__  ##| ##      | ##')
+    print(' | ##    ##| ##  | ##| ##  \ ##| ##  | ##| ##      | ##')
+    print(' |  ######/|  ######/| #######/| ##  | ##| ########| ##')
+    print('  \______/  \______/ |_______/ |__/  |__/|________/|__/\n')
+    print('       /#######  /#######  /######## /##      /##')
+    print('      | ##__  ##| ##__  ##| ##_____/| ##  /# | ##')
+    print('      | ##  \ ##| ##  \ ##| ##      | ## /###| ##')
+    print('      | ####### | #######/| #####   | ##/## ## ##')
+    print('      | ##__  ##| ##__  ##| ##__/   | ####_  ####')
+    print('      | ##  \ ##| ##  \ ##| ##      | ###/ \  ###')
+    print('      | #######/| ##  | ##| ########| ##/   \  ##')
+    print('      |_______/ |__/  |__/|________/|__/     \__/\n')
+    print('                     Author: xakepnz              ')
+    print('    Repo: https://www.github.com/xakepnz/COBALTBREW\n')
+    print(' ------------------------------------------------------\n')
+
+############################################################################################
+# Search Virustotal:
+############################################################################################
+
+def search(api_key, sha256_hash):
+    """
+    Info:
+        Searches a hash against Virustotal database, returns reseponse.
+    
+    Inputs:
+        api_key     - str, your VT API key.
+        sha256_hash - str, the SHA256 hash value of the file to search against VT.
+    
+    Returns:
+        response    - json, object containing response data.
+    """
+
+    r = requests.get(
+        'https://www.virustotal.com/api/v3/files/{}'.format(sha256_hash),
+        headers={
+            'Content-Type': 'application-json',
+            'x-apikey': '{}'.format(api_key)
+        }
+    )
+
+    if r.ok:
+        if r.status_code == 200:
+            return True
+    else:
+        if r.status_code == 404:
+            return None
         else:
-            pass
-        if report.done:
-            print bcolors.BOLD,'*Virustotal Report:*',bcolors.ENDC
-            print bcolors.OKBLUE,'* Link:',report.permalink,'\n',bcolors.ENDC
-            print bcolors.BOLD,'*Results:*\n',bcolors.ENDC
-            print bcolors.OKGREEN,'* Resource Status:',report.status,bcolors.ENDC
-            print bcolors.OKGREEN,'* Antivirus Total:',report.total,bcolors.ENDC
-            print bcolors.OKGREEN,'* Antivirus Positives:',report.positives,'\n',bcolors.ENDC
-            for antivirus, malware in report:
-                if malware is not None:
-                    print bcolors.OKGREEN,'*Antivirus:*',antivirus[0],bcolors.ENDC
-                    print bcolors.OKGREEN,'* Antivirus Version:',antivirus[1],bcolors.ENDC
-                    print bcolors.OKGREEN,'* Antivirus Update:',antivirus[2],bcolors.ENDC
-                    print bcolors.OKGREEN,'* Malware:',malware,bcolors.ENDC
-                    exit(0)
-    except Exception as e:
-        print bcolors.FAIL,'[!] Error: Unable to computate hashes...',e,bcolors.ENDC
+            print('Error, failed to connect response code was: {}'.format(r.status_code))
+            exit(1)
 
 ############################################################################################
-# Remote files hash, no check:
+# Obtain local file hash:
 ############################################################################################
 
-def remotefiles():
-    try:
-        print bcolors.BOLD,'\n[+] Downloading:',url,bcolors.ENDC
-        if sys.platform == 'darwin':
-                platform = True
-                remotefile = os.system('curl ' + url + ' -o ' + trash + ' -A ' + agent + ' -f' + ' -k' + ' -s')
-        if sys.platform == 'linux2':
-                platform = True
-                remotefile = os.system('wget ' + ' -q' + ' -c' + ' -U ' + agent + ' --no-check-certificate ' + url + ' -O ' + trash)
-        if sys.platform == 'win32':
-                platform = True
-                print bcolors.FAIL,'\n[!] Error. This feature does not work on Windows.\n',bcolors.ENDC
-                exit (0)
-        if sys.platform == 'cygwin':
-                platform = True
-                print bcolors.FAIL,'\n[!] Error. This feature does not work on Cygwin.\n',bcolors.ENDC
-                exit(0)
-        if platform == False:
-                print bcolors.FAIL,'\n[!] Error. Unknown OS.\n',bcolors.ENDC
-                exit(0)
-        print bcolors.OKGREEN,'\n [+] Temporarily saved as: ' + '"'+trash+'"',bcolors.ENDC
-    except Exception as e:
-           print bcolors.FAIL,'\n[!] Error: Unable to download remote file...\n',e,bcolors.ENDC
-           exit(0)
+def local(path, buffer_size):
+    """
+    Info:
+        Opens a file, reads the bytes to obtain the hash values.
+    
+    Inputs:
+        path        - str, file path to obtain hashes of.
+        buffer_size - int, chunk value to read x amount of bytes.
+    
+    Returns:
+        hashes      - dict, containing the hash values.
+    """
 
+    # Define the hash objects:
+    md5 = hashlib.md5()
+    sha1 = hashlib.sha1()
+    sha256 = hashlib.sha256()
+    sha512 = hashlib.sha512()
+
+    # Open the file and iterate over the chunks until the full file is hashed:
     try:
-        with open(trash, 'rb') as f:
+        with open(path, 'rb') as f:
             while True:
-                data = f.read(buffer)
-                if not data:
+                d_ = f.read(buffer_size)
+                if not d_:
                     break
-                md5.update(data)
-                sha1.update(data)
-                sha256.update(data)
-                sha512.update(data)
-        os.system('rm ' + trash)
-        
-        print bcolors.BOLD,'\n*Hash Results:*\n',bcolors.ENDC
-        print bcolors.OKBLUE,('*URL:*   ' + str(url)) + '\n',bcolors.ENDC
-        print bcolors.OKGREEN,('* MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
-        print bcolors.OKGREEN,'[+] Temporary file was deleted.\n',bcolors.ENDC
-        exit(0)
-    except Exception as e:
-           print bcolors.FAIL,'\n[!] Error: There was an issue hashing remotely...\n',e,bcolors.ENDC
-           exit(0)
+                md5.update(d_)
+                sha1.update(d_)
+                sha256.update(d_)
+                sha512.update(d_)
 
+    except (FileNotFoundError, PermissionError, IsADirectoryError) as e:
+        print('Error, failed to read file: "{}" check path.'.format(path))
+        exit(1)
+    
+    return {
+        'File': '{}'.format(path),
+        'MD5': '{}'.format(md5.hexdigest()),
+        'SHA1': '{}'.format(sha1.hexdigest()),
+        'SHA256': '{}'.format(sha256.hexdigest()),
+        'SHA512': '{}'.format(sha512.hexdigest())
+    }
 
 ############################################################################################
-# Remote files hash, with check:
+# Read multiple filepaths:
 ############################################################################################
 
-def remotefilescheck():
-    try:
-        print bcolors.BOLD,'\n[+] Downloading:',url,bcolors.ENDC
-        if sys.platform == 'darwin':
-                platform = True
-                remotefile = os.system('curl ' + url + ' -o ' + trash + ' -A ' + agent + ' -f' + ' -k' + ' -s')
-        if sys.platform == 'linux2':
-                platform = True
-                remotefile = os.system('wget ' + ' -q' + ' -c' + ' -U ' + agent + ' --no-check-certificate ' + url + ' -O ' + trash)
-        if sys.platform == 'win32':
-                platform = True
-                print bcolors.FAIL,'\n[!] Error. This feature does not work on Windows.\n',bcolors.ENDC
-                exit (0)
-        if sys.platform == 'cygwin':
-                platform = True
-                print bcolors.FAIL,'\n[!] Error. This feature does not work on Cygwin.\n',bcolors.ENDC
-                exit(0)
-        if platform == False:
-                print bcolors.FAIL,'\n[!] Error. Unknown OS.\n',bcolors.ENDC
-                exit(0)
-        print bcolors.OKGREEN,'\n [+] Temporarily saved as: ' + '"'+trash+'"',bcolors.ENDC
-    except Exception as e:
-           print bcolors.FAIL,'\n[!] Error: Unable to download remote file...\n',e,bcolors.ENDC
-           exit(0)
+def read_multi(multi_loc):
+    """
+    Info:
+        Takes a file path to a new line separated TXT file containing multiple file paths.
+    
+    Inputs:
+        multi_loc  - str, file path to TXT file containing multiple files to check.
+    
+    Returns:
+        file_paths - list, multiple files to get hash values for.
+    """
 
     try:
-        with open(trash, 'rb') as f:
-            while True:
-                data = f.read(buffer)
-                if not data:
-                    break
-                md5.update(data)
-                sha1.update(data)
-                sha256.update(data)
-                sha512.update(data)
-        os.system('rm ' + trash)
-        print bcolors.BOLD,'\n*Hash Results:*\n',bcolors.ENDC
-        print bcolors.OKBLUE,(' *URL:*   ' + str(url)) + '\n',bcolors.ENDC
-        print bcolors.OKGREEN,('* MD5:    {0}'.format(md5.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA1:   {0}'.format(sha1.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA256: {0}'.format(sha256.hexdigest())),bcolors.ENDC
-        print bcolors.OKGREEN,('* SHA512: {0}'.format(sha512.hexdigest())) + '\n',bcolors.ENDC
-        print bcolors.OKGREEN,'[+] Temporary file was deleted.\n',bcolors.ENDC
-        remotesha = sha256.hexdigest()
-        report = v.get(remotesha)
-        if report is None:
-            print bcolors.FAIL,'\n[!] Failed: SHA256 Hash does not exist on Virustotal!\n',bcolors.ENDC
-            exit(0)
-        else:
-            pass
-        if report.done:
-            print bcolors.BOLD,'*Virustotal Report:*',bcolors.ENDC
-            print bcolors.OKBLUE,'* Link:',report.permalink,'\n',bcolors.ENDC
-            print bcolors.BOLD,'*Results:*\n',bcolors.ENDC
-            print bcolors.OKGREEN,'* Resource Status:',report.status,bcolors.ENDC
-            print bcolors.OKGREEN,'* Antivirus Total:',report.total,bcolors.ENDC
-            print bcolors.OKGREEN,'* Antivirus Positives:',report.positives,'\n',bcolors.ENDC
-            for antivirus, malware in report:
-                if malware is not None:
-                    print bcolors.OKGREEN,'*Antivirus:*',antivirus[0],bcolors.ENDC
-                    print bcolors.OKGREEN,'* Antivirus Version:',antivirus[1],bcolors.ENDC
-                    print bcolors.OKGREEN,'* Antivirus Update:',antivirus[2],bcolors.ENDC
-                    print bcolors.OKGREEN,'* Malware:',malware,bcolors.ENDC
-                    exit(0)
-    except Exception as e:
-           print bcolors.FAIL,'\n[!] Error: There was an issue hashing remotely...\n',e,bcolors.ENDC
-           exit(0)
+        file_paths = []
+
+        with open(multi_loc, 'r') as f:
+            raw_files = f.readlines()
+            for r_ in raw_files:
+                r_ = r_.replace('\n','')
+                file_paths.append(r_)
+
+        return file_paths
+
+    except (FileNotFoundError, PermissionError, IsADirectoryError) as e:
+        print('Error, failed to read file: "{}" check path.'.format(path))
+        exit(1)
 
 ############################################################################################
 # Main:
 ############################################################################################
 
-def main():
-    print bcolors.OKGREEN,'\n  /######   /######  /#######   /######  /##    /########',bcolors.ENDC
-    print bcolors.OKGREEN,' /##__  ## /##__  ##| ##__  ## /##__  ##| ##   |__  ##__/',bcolors.ENDC
-    print bcolors.OKGREEN,'| ##  \__/| ##  \ ##| ##  \ ##| ##  \ ##| ##      | ##',bcolors.ENDC
-    print bcolors.OKGREEN,'| ##      | ##  | ##| ####### | ########| ##      | ##',bcolors.ENDC
-    print bcolors.OKGREEN,'| ##      | ##  | ##| ##__  ##| ##__  ##| ##      | ##',bcolors.ENDC
-    print bcolors.OKGREEN,'| ##    ##| ##  | ##| ##  \ ##| ##  | ##| ##      | ##',bcolors.ENDC
-    print bcolors.OKGREEN,'|  ######/|  ######/| #######/| ##  | ##| ########| ##',bcolors.ENDC
-    print bcolors.OKGREEN,' \______/  \______/ |_______/ |__/  |__/|________/|__/\n',bcolors.ENDC
-    print bcolors.OKGREEN,'      /#######  /#######  /######## /##      /##',bcolors.ENDC
-    print bcolors.OKGREEN,'     | ##__  ##| ##__  ##| ##_____/| ##  /# | ##',bcolors.ENDC
-    print bcolors.OKGREEN,'     | ##  \ ##| ##  \ ##| ##      | ## /###| ##',bcolors.ENDC
-    print bcolors.OKGREEN,'     | ####### | #######/| #####   | ##/## ## ##',bcolors.ENDC
-    print bcolors.OKGREEN,'     | ##__  ##| ##__  ##| ##__/   | ####_  ####',bcolors.ENDC
-    print bcolors.OKGREEN,'     | ##  \ ##| ##  \ ##| ##      | ###/ \  ###',bcolors.ENDC
-    print bcolors.OKGREEN,'     | #######/| ##  | ##| ########| ##/   \  ##',bcolors.ENDC
-    print bcolors.OKGREEN,'     |_______/ |__/  |__/|________/|__/     \__/\n',bcolors.ENDC
-    print bcolors.OKBLUE,'   Link: https://www.github.com/xakepnz/COBALTBREW',bcolors.ENDC
-    print bcolors.OKGREEN,'------------------------------------------------------',bcolors.ENDC
+# Print the banner:
+banner()
 
-############################################################################################
-# Start:
-############################################################################################
+# Take variable input from the user:
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '-f', '--file', 
+    help='File path of file to obtain hashes for.',
+    required=False
+)
+parser.add_argument(
+    '-m', '--multi', 
+    help='Multiple file paths new line separated TXT file.',
+    required=False
+)
+parser.add_argument(
+    '-s', '--search', 
+    help='Search the hash against Virustotal',
+    required=False,
+    action='store_true'
+)
+args = parser.parse_args()
+local_file_path = args.file
+multi = args.multi
+search_bool = args.search
 
-if __name__ == "__main__":
+# Ignore requests without input:
+if not local_file_path and not multi and not search_bool:
+    print('         No input provided, try cobaltbrew --help\n')
+    exit(1)
 
-    class bcolors:
-        OKBLUE = '\033[94m'
-        OKGREEN = '\033[92m'
-        WARNING = '\033[93m'
-        FAIL = '\033[91m'
-        ENDC = '\033[0m'
-        BOLD = '\033[1m'
+# Ignore requests to search without a key:
+if search_bool and not api_key:
+    print('Error, virustotal searching enabled without any API Key present.')
+    exit(1)
 
-    main()
+# Get hashes of local file:
+if local_file_path:
+    hashes = local(local_file_path, buffer_size)
 
-############################################################################################
-# Argument Function:
-############################################################################################
+    # Print the hashes:
+    print('File: {}\n'.format(hashes.get('File')))
+    print('- MD5: {}'.format(hashes.get('MD5')))
+    print('- SHA1: {}'.format(hashes.get('SHA1')))
+    print('- SHA256: {}'.format(hashes.get('SHA256')))
+    print('- SHA512: {}\n'.format(hashes.get('SHA512')))
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--file', help='Specify a file name, and get its hash.', required=False)
-    parser.add_argument('-r', '--remote', help='Specify a URL to download a file, and get its hash.', required=False)
-    parser.add_argument('-c', '--check', help='Check to see if hash exists on VirusTotal.', required=False, action='store_true')
-    args = parser.parse_args()
-    url = args.remote
-    localfile = args.file
-    check = args.check
-
-############################################################################################
-# Error checking:
-############################################################################################
-
-    if localfile is None and url is None:
-        print bcolors.WARNING,'\n[?] Warning: Nothing to hash. Try -r (--remote) or -f (--file).',bcolors.ENDC
-        print bcolors.OKGREEN,'[+] Example: ./cobaltbrew -r https://www.nsa.gov/s3cr3t.pdf',bcolors.ENDC
-        print bcolors.OKGREEN,'[+] Example: ./cobaltbrew -l ~/Downloads/s3cr3t.pdf',bcolors.ENDC
-        print bcolors.FAIL,'[!] Error: Nothing submitted...\n',bcolors.ENDC
-        exit(0)
-
-############################################################################################
-# Check localfile, and get hashes:
-############################################################################################
-
-    if localfile is not None and check is True:
-        print bcolors.OKGREEN,'\n[+] Virustotal Hash Check Enabled.\n',bcolors.ENDC
-        if VIRUSTOTALKEY is '':
-            print bcolors.FAIL,'[!] Error: You did not specify your Virus Total API Key in the source.',bcolors.ENDC
-            print bcolors.FAIL,'[!] Exiting.\n',bcolors.ENDC
-            exit (0)
+    # If searching enabled, search against Virustotal and print results:
+    if search_bool:
+        found = search(api_key, hashes.get('SHA256'))
+        print('Virustotal results:\n')
+        if found:
+            print('- Found: https://www.virustotal.com/gui/file/{}\n'.format(hashes.get('SHA256')))
         else:
-            localfilescheck()
+            print('- No results for: {}\n'.format(hashes.get('SHA256')))
 
-############################################################################################
-# Just get localfile hashes:
-############################################################################################
+# Handle multiple file inputs via new line TXT file:
+if multi:
+    file_paths = read_multi(multi)
+    results = []
 
-    if localfile is not None and check is False:
-        localfiles()
+    # Collect the hashes:
+    for f_ in file_paths:
+        results.append(
+            local(f_, buffer_size)
+        )
 
-############################################################################################
-# Just get remote file hashes:
-############################################################################################
-    if url is not None and check is False:
-        remotefiles()
+    # Search against Virustotal
+    if search_bool:
+        for hashes in results:
+            # Print the hashes:
+            print('File: {}\n'.format(hashes.get('File')))
+            print('- MD5: {}'.format(hashes.get('MD5')))
+            print('- SHA1: {}'.format(hashes.get('SHA1')))
+            print('- SHA256: {}'.format(hashes.get('SHA256')))
+            print('- SHA512: {}\n'.format(hashes.get('SHA512')))
 
-############################################################################################
-# Check remotefile, and get hashes:
-############################################################################################
+            # If searching enabled, search against Virustotal and print results:
+            found = search(api_key, hashes.get('SHA256'))
+            print('Virustotal results:\n')
+            if found:
+                print('Found: https://www.virustotal.com/gui/file/{}\n'.format(hashes.get('SHA256')))
+            else:
+                print('No results for: {}\n'.format(hashes.get('SHA256')))
 
-    if url is not None and check is True:
-        print bcolors.OKGREEN,'[+] Virustotal Hash Check Enabled.\n',bcolors.ENDC
-    if VIRUSTOTALKEY is '':
-        print bcolors.FAIL,'[!] Error: You did not specify your Virus Total API Key in the source.',bcolors.ENDC
-        print bcolors.FAIL,'[!] Exiting.\n',bcolors.ENDC
-        exit (0)
+    # Otherwise just print the hashes:
     else:
-        remotefilescheck()
+        for hashes in results:
+            # Print the hashes:
+            print('File: {}\n'.format(hashes.get('File')))
+            print('- MD5: {}'.format(hashes.get('MD5')))
+            print('- SHA1: {}'.format(hashes.get('SHA1')))
+            print('- SHA256: {}'.format(hashes.get('SHA256')))
+            print('- SHA512: {}\n'.format(hashes.get('SHA512')))
